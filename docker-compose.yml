@@ -1,20 +1,48 @@
+version: "3"
 services:
-  web:
-    build: .
-    restart: unless-stopped
-    ports:
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    ports: 
       - "8080:80"
-    depends_on:
-      - db
-  db:
-    image: mariadb:11.3
-    restart: unless-stopped
-    ports:
-      - "3306:3306"
-    environment:
-      MARIADB_DATABASE: laravel
-      MARIADB_USER: user
-      MARIADB_PASSWORD: user
-      MARIADB_ROOT_PASSWORD:
+    networks:
+      - internal
     volumes:
-      - ./data/db:/var/lib/mysql
+      - ./application/:/var/www/html/
+      - ./logs/nginx:/var/log/nginx/
+    container_name: nginx
+  php:
+    build:
+      context: .
+      dockerfile: php/Dockerfile
+    networks:
+      - internal
+    volumes:
+      - ./application/:/var/www/html/
+      - ./logs/php.log:/var/log/fpm-php.www.log
+    container_name: php
+    depends_on:
+      - mysql
+    expose:
+      - "9000"
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+  mysql:
+    container_name: db
+    restart: always
+    image: mysql:latest
+    platform: linux/x86_64
+    ports:
+     - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_USER: 'sushant'
+      MYSQL_PASS: 'password'
+    volumes:
+      - ./db-data:/var/lib/mysql
+    networks:
+      - internal
+networks:
+  internal:
+    driver: bridge
