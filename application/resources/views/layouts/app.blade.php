@@ -29,7 +29,7 @@
     <header class="bg-primary text-white py-4">
         <div class="container mx-auto">
             <nav class="flex justify-between items-center">
-                <a class="text-2xl font-bold" href="{{ url('/') }}">Prof.co</a>
+                <a class="text-2xl font-bold" href="{{ url('/') }}">SmartBoard</a>
                 <div>
                     <a href="{{ route('evaluations.index') }}" class="text-white hover:underline mx-2">Évaluations</a>
                     <a href="{{ route('modules.index') }}" class="text-white hover:underline mx-2">Modules</a>
@@ -46,7 +46,7 @@
 
     <!-- Footer -->
     <footer class="bg-gray-800 text-white text-center py-4">
-        &copy; {{ date('Y') }} Mon Application. Tous droits réservés.
+        &copy; {{ date('Y') }} SmartBoard
     </footer>
 
 </body>
