@@ -55,6 +55,11 @@
                     class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-200">
                     Supprimer
                 </button>
+            <!-- Show Button -->
+            <a href="{{ route('evaluations.show', $evaluation->id) }}"
+                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-200">
+                Voir Notes
+            </a>
             </form>
         </div>
     </div>

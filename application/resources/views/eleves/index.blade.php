@@ -22,6 +22,9 @@
                             <button type="submit" class="text-red-500 hover:underline ml-2">Supprimer</button>
                         </form>
                     </div>
+                <div class="mt-2">
+                    <a href="{{ route('eleves.show', $eleve->id) }}" class="text-green-500 hover:underline">Voir les notes de l'élève</a>
+                </div>
                 </div>
             @endforeach
         </div>
