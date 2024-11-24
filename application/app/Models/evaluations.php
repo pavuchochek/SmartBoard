@@ -17,9 +17,9 @@ class evaluations extends Model
     }
 
     #obtenir toutes les notes d'une evaluation
-    public function evaluationEleve()
+    public function evaluationEleves()
     {
-        return $this->hasMany(evaluationEleve::class);
+        return $this->hasMany(evaluationEleve::class, 'evaluation_id');
     }
 }
 
