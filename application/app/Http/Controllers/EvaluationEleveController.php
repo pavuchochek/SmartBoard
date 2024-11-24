@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\evaluationEleve;
 class EvaluationEleveController extends Controller
 {
     /**
@@ -19,7 +19,7 @@ class EvaluationEleveController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -27,7 +27,19 @@ class EvaluationEleveController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //recuperer id eleve
+        $eleve_id = $request->input('eleve_id');
+        //recuperer id evaluation qui est en get
+        $evaluation_id = $request->input('evaluation_id');
+        //recuperer note
+        $note = $request->input('note');
+        //store
+        $evaluationEleve = new evaluationEleve();
+        $evaluationEleve->eleve_id = $eleve_id;
+        $evaluationEleve->evaluation_id = $evaluation_id;
+        $evaluationEleve->note = $note;
+        $evaluationEleve->save();
+        return redirect()->route('evaluations.index');
     }
 
     /**

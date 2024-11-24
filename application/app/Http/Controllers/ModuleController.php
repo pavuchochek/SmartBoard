@@ -19,12 +19,6 @@ namespace App\Http\Controllers;
 
        public function store(Request $request)
        {
-           $request->validate([
-               'code' => 'required|unique:modules',
-               'nom' => 'required',
-               'coefficient' => 'required|integer',
-           ]);
-
            Module::create($request->all());
            return redirect()->route('modules.index');
        }

@@ -6,6 +6,8 @@ use App\Http\Resources\evaluation;
 use App\Models\module;
 use App\Models\evaluations;
 use Illuminate\Http\Request;
+use App\Models\Eleve;
+use App\Models\evaluationEleve;
 
 class EvaluationController extends Controller
 {
@@ -15,8 +17,8 @@ class EvaluationController extends Controller
     public function index()
     {
         $evaluations = evaluations::all();
-        $modules=module::all();
-        return view('evaluations.index', compact('evaluations','modules'));
+        $modules = module::all();
+        return view('evaluations.index', compact('evaluations', 'modules'));
     }
 
     /**
@@ -24,8 +26,8 @@ class EvaluationController extends Controller
      */
     public function create()
     {
-        $modules=module::all();
-        return view('evaluations.create',data:compact('modules'));
+        $modules = module::all();
+        return view('evaluations.create', data: compact('modules'));
     }
 
     /**
@@ -48,9 +50,31 @@ class EvaluationController extends Controller
      * Display the specified resource.
      */
     public function show(string $id)
-    {
-        return view('evaluations.show', compact('evaluation'));
+{
+    $evaluation = evaluations::find($id);
+
+    if (!$evaluation) {
+        abort(404, 'Évaluation introuvable.');
     }
+
+    // Récupérer les évaluations des élèves
+    $evaluationEleves = $evaluation->evaluationEleves;
+
+    if ($evaluationEleves->isEmpty()) {
+        return view('evaluations.show', [
+            'evaluation' => $evaluation,
+            'etudiants' => [],
+            'evaluationEleves' => []
+        ])->with('error', 'Aucun élève associé à cette évaluation.');
+    }
+
+    // Récupérer les élèves associés
+    $etudiants = Eleve::whereIn('id', $evaluationEleves->pluck('eleve_id'))->get();
+    $alletudiants=Eleve::all();
+
+    return view('evaluations.show', compact('evaluation', 'etudiants', 'evaluationEleves','alletudiants'));
+}
+
 
     /**
      * Show the form for editing the specified resource.
@@ -58,16 +82,17 @@ class EvaluationController extends Controller
     public function edit(string $id)
     {
         $evaluation = evaluations::find($id);
-        $modules=module::all();
-        return view('evaluations.edit', compact('evaluation','modules'));
+        $evaluationEleves = $evaluation->evaluationEleve;
+        $eleves = Eleve::all();
+        return view('evaluations.edit', compact('evaluation', 'modules'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string  $id)	
+    public function update(Request $request, string  $id)
     {
-        $evaluation=evaluations::find($id);
+        $evaluation = evaluations::find($id);
         //mettre a jour les champs
         $evaluation->update($request->all());
 
@@ -80,6 +105,6 @@ class EvaluationController extends Controller
     public function destroy(evaluations $evaluation)
     {
         $evaluation->delete();
-        return redirect()->route('evaluations.index');	
+        return redirect()->route('evaluations.index');
     }
 }
