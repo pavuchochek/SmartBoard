@@ -14,6 +14,22 @@ class eleve extends Model
     #obtenir les notes d'un eleve
     public function evaluations()
     {
-        return $this->hasMany(evaluationEleve::class);
+        return $this->hasMany(evaluationEleve::class, 'eleve_id');
+    }
+
+    #obtenir la moyenne d'un eleve
+    public function moyenne()
+    {
+        $notes = $this->evaluations;
+        $somme = 0;
+        $coefficient = 0;
+        foreach ($notes as $note) {
+            $somme += $note->note * $note->evaluation->coefficient;
+            $coefficient += $note->evaluation->coefficient;
+        }
+        if ($coefficient == 0) {
+            return 0;
+        }
+        return $somme / $coefficient;
     }
 }
