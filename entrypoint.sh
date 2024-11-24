@@ -6,11 +6,15 @@ until mysql -h db -u root -p${MYSQL_ROOT_PASSWORD} -e "SELECT 1"; do
   sleep 2
 done
 
-# Création de la base de données si elle n'existe pas
-mysql -h db -u root -p${MYSQL_ROOT_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS smartboard_db;"
+# Suppression et recréation de la base de données
+mysql -h db -u root -p${MYSQL_ROOT_PASSWORD} -e "DROP DATABASE IF EXISTS smartboard_db;"
+mysql -h db -u root -p${MYSQL_ROOT_PASSWORD} -e "CREATE DATABASE smartboard_db;"
 
-# Lancer les migrations Laravel
-php artisan migrate
+# Migrations
+php artisan migrate --force
+
+# Seeds (ajout des données d'exemple)
+php artisan db:seed --force
 
 # Lancer le serveur PHP-FPM
 php-fpm
