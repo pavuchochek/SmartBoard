@@ -33,8 +33,6 @@ services:
     restart: always
     image: mysql:latest
     platform: linux/x86_64
-    ports:
-     - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: 'root'
       MYSQL_USER: 'sushant'
