@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\evaluationEleve;
+use App\Models\eleve;
+use App\Models\evaluations;
 class EvaluationEleveController extends Controller
 {
     /**
@@ -19,7 +21,9 @@ class EvaluationEleveController extends Controller
      */
     public function create()
     {
-        
+        $eleves = eleve::all();
+        $evaluations = evaluations::all();
+        return view('evaluationsEleve.create', compact('eleves', 'evaluations'));
     }
 
     /**
@@ -72,5 +76,15 @@ class EvaluationEleveController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function below10ByEval(string $id)
+    {
+        $evaluation = evaluations::find($id);
+        $evaluationEleves = $evaluation->evaluationEleves;
+        $eleves = $evaluationEleves->filter(function($evaluationEleve){
+            return $evaluationEleve->note < 10;
+        });
+        return view('evaluationsEleve.below10', compact('eleves', 'evaluation'));
     }
 }

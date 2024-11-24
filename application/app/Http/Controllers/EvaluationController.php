@@ -50,30 +50,31 @@ class EvaluationController extends Controller
      * Display the specified resource.
      */
     public function show(string $id)
-{
-    $evaluation = evaluations::find($id);
-
-    if (!$evaluation) {
-        abort(404, 'Évaluation introuvable.');
+    {
+        $evaluation = evaluations::find($id);
+    
+        // Récupérer les évaluations des élèves
+        $evaluationEleves = $evaluation->evaluationEleves;
+    
+        if ($evaluationEleves->isEmpty()) {
+            return view('evaluations.show', [
+                'evaluation' => $evaluation,
+                'etudiants' => [],
+                'evaluationEleves' => []
+            ])->with('error', 'Aucun élève associé à cette évaluation.');
+        }
+    
+        // Récupérer les élèves associés avec leurs notes
+        $etudiants = $evaluationEleves->map(function($evaluationEleve){
+            return [
+                'eleve' => $evaluationEleve->eleve, // L'élève associé
+                'note' => $evaluationEleve->note   // La note de l'élève
+            ];
+        });
+    
+        return view('evaluations.show', compact('evaluation', 'etudiants', 'evaluationEleves'));
     }
-
-    // Récupérer les évaluations des élèves
-    $evaluationEleves = $evaluation->evaluationEleves;
-
-    if ($evaluationEleves->isEmpty()) {
-        return view('evaluations.show', [
-            'evaluation' => $evaluation,
-            'etudiants' => [],
-            'evaluationEleves' => []
-        ])->with('error', 'Aucun élève associé à cette évaluation.');
-    }
-
-    // Récupérer les élèves associés
-    $etudiants = Eleve::whereIn('id', $evaluationEleves->pluck('eleve_id'))->get();
-    $alletudiants=Eleve::all();
-
-    return view('evaluations.show', compact('evaluation', 'etudiants', 'evaluationEleves','alletudiants'));
-}
+    
 
 
     /**
