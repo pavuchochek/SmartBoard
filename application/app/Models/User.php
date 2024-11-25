@@ -18,9 +18,9 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -39,7 +39,18 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    //relation avec la table  qui contient les eleves
+    public function eleve()
+    {
+        return $this->hasOne(Eleve::class,"email",localKey:"email");
+    }
+
+    //relation avec la table  qui contient les professeurs
+    public function professeur()
+    {
+        return $this->hasOne(Professeur::class,"email",localKey:"email");
+    }
 }
