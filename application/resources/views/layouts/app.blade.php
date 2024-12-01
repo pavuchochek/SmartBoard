@@ -30,13 +30,21 @@
         <div class="container mx-auto">
             <nav class="flex justify-between items-center">
                 <a class="text-2xl font-bold" href="{{ url('/') }}">SmartBoard</a>
+               
                 <div>
+                @can('access-professor-pages')
+                    <p>Vous etes prof</p>
                     <a href="{{ route('evaluations.index') }}" class="text-white hover:underline mx-2">Évaluations</a>
                     <a href="{{ route('modules.index') }}" class="text-white hover:underline mx-2">Modules</a>
                     <a href="{{ route('eleves.index') }}" class="text-white hover:underline mx-2">Élèves</a>
+                @endcan
+                @can('access-student-pages')
+                    <p> Vous etes étudiant</p>
+                @endcan
                     <a href="{{ route("user.show",Auth::user())}}" class="text-white hover:underline mx-2">Mon Profil</a>
                     <a href="{{ route('logout') }}" class="text-white hover:underline mx-2">Déconnexion</a>
                 </div>
+                
             </nav>
         </div>
     </header>

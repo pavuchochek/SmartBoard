@@ -25,10 +25,12 @@ Route::get('/', function () {
     return view('welcome');
 })->middleware('auth');
 
-Route::resource('modules', ModuleController::class)->middleware('auth');
-Route::resource('eleves', EleveController::class)->middleware('auth'); // Cela génère toutes les routes nécessaires
-Route::resource(name: 'evaluationEleves', controller: EvaluationEleveController::class)->middleware('auth');// Cela génère toutes les routes nécessaires
-Route::resource(name:"evaluations", controller:EvaluationController::class)->middleware('auth'); // Cela génère toutes les routes nécessaires
+Route::middleware('can:access-professor-pages')->group(function () {
+    Route::resource('modules', ModuleController::class)->middleware('auth');
+    Route::resource('eleves', EleveController::class)->middleware('auth'); // Cela génère toutes les routes nécessaires
+    Route::resource(name: 'evaluationEleves', controller: EvaluationEleveController::class)->middleware('auth');// Cela génère toutes les routes nécessaires
+    Route::resource(name:"evaluations", controller:EvaluationController::class)->middleware('auth'); // Cela génère toutes les routes nécessaires
+});
 Route::resource(name:'user', controller:UserController::class)->middleware('auth'); // Cela génère toutes les routes nécessaires
 //Routes custom
 Route::get('evaluations/{id}/below10', [EvaluationEleveController::class, 'below10ByEval'])->name('evaluationEleves.below10ByEval')->middleware('auth');
