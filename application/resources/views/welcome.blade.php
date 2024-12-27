@@ -2,6 +2,7 @@
 
 @section('title', 'Liste des Evaluations')
 @section('content')
+    
     <div class="container mx-auto p-4">
         
     @can('access-professor-pages')
@@ -15,8 +16,9 @@
             <div class="box evaluations bg-red-500 text-white p-4 rounded cursor-pointer" onclick="location.href='/evaluations'">
                 Les évaluations
             </div>
-        </div>
-    @endcan
+            </div>
+
+        @endcan
     @can('access-student-pages')
     <p>Bienvenue en tant qu'etudiant</p>
     @endcan

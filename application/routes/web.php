@@ -7,6 +7,7 @@ use App\Http\Controllers\EvaluationEleveController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\MessageController;
 
 
 
@@ -45,3 +46,4 @@ Route::get("register", function () {
     return view('register');
 });
 Route::get('logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
+Route::post("message", [MessageController::class, 'sendMessageMail'])->name('send.message.mail');
