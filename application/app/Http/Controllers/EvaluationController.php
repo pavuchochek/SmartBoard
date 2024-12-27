@@ -84,6 +84,7 @@ class EvaluationController extends Controller
     {
         $evaluation = evaluations::find($id);
         $evaluationEleves = $evaluation->evaluationEleve;
+        $modules = module::all();
         $eleves = Eleve::all();
         return view('evaluations.edit', compact('evaluation', 'modules'));
     }

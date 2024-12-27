@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Eleve;
+use Illuminate\Support\Facades\Gate;
 
 class EleveController extends Controller
 {
@@ -12,6 +13,10 @@ class EleveController extends Controller
      */
     public function index()
     {
+        if(auth()->user()->role != 'professeur'){
+            abort(403, 'Vous n\'êtes pas autorisé à voir cette page.');
+        }
+
         $eleves = Eleve::all();
         return view('eleves.index', compact('eleves'));
     }
@@ -21,6 +26,10 @@ class EleveController extends Controller
      */
     public function create()
     {
+        if(auth()->user()->role != 'professeur'){
+            abort(403, 'Vous n\'êtes pas autorisé à voir cette page.');
+        }
+
         return view('eleves.create');
     }
 
@@ -29,6 +38,10 @@ class EleveController extends Controller
      */
     public function store(Request $request)
     {
+        if(auth()->user()->role != 'professeur'){
+            abort(403, 'Vous n\'êtes pas autorisé à voir cette page.');
+        }
+
         $request->validate([
             'nom' => 'required',
             'prenom' => 'required',
@@ -50,8 +63,15 @@ class EleveController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $id)
+    public function show($id)
     {
+        if(auth()->user()->role != 'professeur'){
+            if(Gate::denies('view', Eleve::findOrFail($id))){
+                abort(403, 'Vous n\'êtes pas autorisé à voir cette page.');
+            }
+        }
+
+        // Récupérer l'élève
         $eleve = Eleve::findOrFail($id);
         return view('eleves.show', compact('eleve'));
     }
@@ -61,6 +81,10 @@ class EleveController extends Controller
      */
     public function edit(int $id)  
     {
+        if(auth()->user()->role != 'professeur'){
+            abort(403, 'Vous n\'êtes pas autorisé à voir cette page.');
+        }
+
         $eleve = Eleve::findOrFail($id);
         return view('eleves.edit', compact('eleve'));
     }
@@ -70,6 +94,9 @@ class EleveController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        if(auth()->user()->role != 'professeur'){
+            abort(403, 'Vous n\'êtes pas autorisé à voir cette page.');
+        }
 
         // Valider les champs
         $request->validate([
@@ -97,7 +124,7 @@ class EleveController extends Controller
         ]);
         $eleve->save();  // Sauvegarder dans la base de données
     
-        return redirect()->route('eleves.index')->with('success', 'Élève créé avec succès');
+        return redirect()->route('eleves.index')->with('success', 'Élève mis à jour avec succès');
     }
     
     /**
@@ -105,6 +132,10 @@ class EleveController extends Controller
      */
     public function destroy($id)
     {
+        if(auth()->user()->role != 'professeur'){
+            abort(403, 'Vous n\'êtes pas autorisé à voir cette page.');
+        }
+
         // Rechercher l'élève par son ID et le supprimer
         $eleve = Eleve::findOrFail($id); // Trouve l'élève ou échoue avec une erreur 404
         $eleve->delete();  // Supprime l'élève

@@ -20,7 +20,10 @@
 
         @endcan
     @can('access-student-pages')
-    <p>Bienvenue en tant qu'etudiant</p>
+    <h1 class="text-3xl p-5">Bienvenue en tant qu'etudiant</h1>
+    <a href="{{ route('eleves.show', Auth::user()->eleve?->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Voir mes notes
+    </a>
     @endcan
     </div>
 @endsection
