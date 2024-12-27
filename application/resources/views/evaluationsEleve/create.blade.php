@@ -4,20 +4,25 @@
 @section('content')
 <div class="flex justify-center items-center h-screen">
     <div class="bg-white p-8 rounded-lg shadow-lg w-1/3">
-        <form action="{{ route('evaluationsEleve.store') }}" method="POST">
+        <form action="{{ route('evaluationEleves.store') }}" method="POST">
             @csrf
             <div class="mb-4">
                 <label for="evaluation" class="block text-gray-700 text-sm font-bold mb-2">Choisir l'évaluation:</label>
-                <select id="evaluation" name="evaluation" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                <select id="evaluation" name="evaluation_id" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                     <option value="">Sélectionner une évaluation</option>
                     <!-- Add options dynamically from the database -->
+                @foreach($evaluations as $evaluation)
+                    <option value="{{ $evaluation->id }}">{{ $evaluation->titre }}</option>
+                @endforeach
                 </select>
             </div>
             <div class="mb-4">
                 <label for="eleve" class="block text-gray-700 text-sm font-bold mb-2">Choisir l'élève:</label>
-                <select id="eleve" name="eleve" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                <select id="eleve" name="eleve_id" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                     <option value="">Sélectionner un élève</option>
-                    <!-- Add options dynamically from the database -->
+                    @foreach($eleves as $eleve)
+                    <option value="{{ $eleve->id }}">{{ $eleve->nom }}</option>
+                @endforeach
                 </select>
             </div>
             <div class="mb-4">

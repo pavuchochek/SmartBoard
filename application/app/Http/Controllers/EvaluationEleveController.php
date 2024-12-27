@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\MessageMail;
 use Illuminate\Http\Request;
 use App\Models\evaluationEleve;
 use App\Models\eleve;
 use App\Models\evaluations;
+use Symfony\Component\Mailer\Messenger\SendEmailMessage;
+use Illuminate\Support\Facades\Mail;
+
 class EvaluationEleveController extends Controller
 {
     /**
@@ -31,9 +35,9 @@ class EvaluationEleveController extends Controller
      */
     public function store(Request $request)
     {
-        //recuperer id eleve
         $eleve_id = $request->input('eleve_id');
-        //recuperer id evaluation qui est en get
+        //recuperer l'eleve
+        $eleve = eleve::find($eleve_id);
         $evaluation_id = $request->input('evaluation_id');
         //recuperer note
         $note = $request->input('note');
@@ -43,6 +47,8 @@ class EvaluationEleveController extends Controller
         $evaluationEleve->evaluation_id = $evaluation_id;
         $evaluationEleve->note = $note;
         $evaluationEleve->save();
+        //envoyer un mail a l'eleve
+        Mail::to($eleve->email)->send(new MessageMail($evaluationEleve));
         return redirect()->route('evaluations.index');
     }
 

@@ -17,16 +17,6 @@
                 Les évaluations
             </div>
             </div>
-        
-            <form action="{{ route('send.message.mail') }}" method="POST">
-                <label for="message">Message</label>
-                {{ csrf_field() }}
-                <p>
-                    <textarea name="message" id="message" rows="4" placeholder="Message à envoyer ici"></textarea>
-                    {{ $errors->first('message', ":message") }}
-                </p>
-                <button type="submit">Envoyer</button>
-            </form>
 
         @endcan
     @can('access-student-pages')

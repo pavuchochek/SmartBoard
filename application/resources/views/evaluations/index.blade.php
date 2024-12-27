@@ -19,6 +19,9 @@
     <a href="{{ route('evaluations.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
         Créer une nouvelle évaluation
     </a>
+    <a href="{{ route('evaluationEleves.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Ajouter une note
+    </a>
 </div>
 </div>
 
